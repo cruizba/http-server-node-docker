@@ -3,6 +3,7 @@ set -eu -o pipefail
 
 export DOCKERHUB_USERNAME="${DOCKERHUB_USERNAME}"
 export DOCKERHUB_PASSWORD="${DOCKERHUB_PASSWORD}"
+export DOCKER_CLI_EXPERIMENTAL=enabled
 
 function docker_tag_exists() {
     TOKEN=$(curl -s -H "Content-Type: application/json" -X POST -d '{"username": "'${DOCKERHUB_USERNAME}'", "password": "'${DOCKERHUB_PASSWORD}'"}' https://hub.docker.com/v2/users/login/ | jq -r .token)
@@ -17,17 +18,17 @@ function getLatestVersion() {
 VERSION=$(getLatestVersion "http-server")
 echo "$VERSION"
 
-
-
 if docker_tag_exists cruizba/http-server "${VERSION}"; then
     echo "The version exists. No new docker image will be created"
     exit 0
 fi
 
-docker build --build-arg VERSION="${VERSION}" -t cruizba/http-server:"${VERSION}" .
-docker tag cruizba/http-server:"${VERSION}" cruizba/http-server:latest
-
 echo "${DOCKERHUB_PASSWORD}" | docker login --username cruizba --password-stdin
-docker push cruizba/http-server:"${VERSION}"
-docker push cruizba/http-server:latest
+
+docker buildx create --name builder-multi
+docker buildx use builder-multi
+
+docker buildx build --platform linux/arm,linux/arm64,linux/amd64 --push --build-arg VERSION="${VERSION}" -t cruizba/http-server:"${VERSION}" .
+docker buildx build --platform linux/arm,linux/arm64,linux/amd64 --push --build-arg VERSION="${VERSION}" -t cruizba/http-server:latest .
+
 docker logout
