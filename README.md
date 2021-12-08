@@ -32,5 +32,5 @@ All the options that can be used are present in the [http-server](https://www.np
 
 # Why
 
-I wanted to have an easy way to spawn http-server to use it temporary to share files by demand. I've also wanted to have automatic builds
+I wanted to have an easy way to spawn http-server to use it temporary to share files on demand. I've also wanted to have automatic builds
 of new versions of http-server in a docker image because all images I see of http-server does not convince me.
