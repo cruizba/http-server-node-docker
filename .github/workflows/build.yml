@@ -11,4 +11,4 @@ jobs:
       DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
     steps:
       - uses: actions/checkout@v2
-        run: chmod u+x prepare_ci.sh build.sh && ./prepare_ci.sh && ./build.sh
+      - run: chmod u+x prepare_ci.sh build.sh && ./prepare_ci.sh && ./build.sh
