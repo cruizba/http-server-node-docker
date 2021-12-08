@@ -1,0 +1,14 @@
+name: Build http-server docker image
+on:
+  schedule:
+    - cron: "5 0 * * *"
+  workflow_dispatch:
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    env:
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    steps:
+      - uses: actions/checkout@v2
+        run: chmod u+x prepare_ci.sh build.sh && ./prepare_ci.sh && ./build.sh
