@@ -1,6 +1,11 @@
 # http-server-node-docker
 Dockerized version of http-server package of npm with automatic builds
 
+Supports:
+- amd64
+- armv7
+- arm64
+
 # How to run
 
 Go to the directory you want to serve and execute:
